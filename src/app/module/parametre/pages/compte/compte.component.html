@@ -1,0 +1,77 @@
+
+<p-table
+    #dt
+    [value]="datacomptes()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Compte {first} à {last} sur {totalRecords}"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+   
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Comptes</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem"></th>
+            <ng-container *ngFor="let col of columns">
+                <th
+                  [pSortableColumn]="col.sortable ? col.field : ''"
+                  [style]="col.style || ''"
+                >
+                  {{ col.header }}
+                  <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                </th>
+            </ng-container>
+       
+            <th style="min-width: 12rem" class="text-center">
+                <p-button icon="pi pi-plus" severity="secondary" rounded class="mr-2 " (onClick)="openNew()" />
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-compte let-rowIndex="rowIndex">
+        <tr>
+            <td style="width: 3rem; font-size: 0.9rem" class="text-primary">{{ rowIndex + 1}}</td>
+            <td style="min-width: 16rem">{{ compte.id }}</td>
+            <td style="min-width: 16rem">{{ compte.cpt_num }}</td>
+            <td style="min-width: 16rem">{{ compte.cpt_nom }}</td>
+            <td style="min-width: 16rem">{{ compte.cpt_etat }}</td>
+      
+            <td class="text-center">
+                <p-button icon="pi pi-pencil" class="mr-2" rounded severity="primary" (click)="editCompte(compte)" />
+                <p-button icon="pi pi-trash" severity="danger" rounded (click)="deleteCompte(compte)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="compteDialog" [style]="{ width: '450px' }" header="Compte Details" [modal]="true">
+    <ng-template #content>
+        <form [formGroup]="compteForm">
+        <div class="flex flex-col gap-6">
+            <app-form-field [formGroup]="compteForm" name="cpt_num" label="cpt_num" type="text"></app-form-field>
+            <app-form-field [formGroup]="compteForm" name="cpt_nom" label="cpt_nom" type="text"></app-form-field>
+            <app-form-field [formGroup]="compteForm" name="cpt_etat" label="cpt_etat" type="text"></app-form-field>
+        </div>
+    </form>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Annuler" icon="pi pi-times" (click)="hideDialog()" severity="danger" />
+        <p-button label="Valider" icon="pi pi-check" (click)="saveCompte()" severity="primary" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmdialog [style]="{ width: '450px' }" />
+<p-toast position="top-center" styleClass="toast-center" />

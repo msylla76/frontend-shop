@@ -1,0 +1,51 @@
+<div class="p-field">
+  <label [for]="name">{{ label }}</label>
+  <ng-container [ngSwitch]="type">
+    <input *ngSwitchCase="'text'" pInputText [id]="name" type="text" [formControl]="control" fluid/>
+    <input *ngSwitchCase="'number'" pInputText [id]="name" type="number" [formControl]="control" fluid/>
+    <textarea *ngSwitchCase="'textarea'" pInputTextarea [id]="name" [formControl]="control" fluid></textarea>
+    <p-select
+      *ngSwitchCase="'select'"
+      [id]="name"
+      [formControl]="control"
+      placeholder="Sélectionnez"
+      [options]="options"
+      [optionLabel]="optionLabel"
+      [optionValue]="optionValue"
+      appendTo="body"
+      [filter]="true"
+      fluid
+    ></p-select>
+    <!-- Radio -->
+    <div *ngSwitchCase="'radio'" class="p-formgroup-inline">
+      <ng-container *ngFor="let opt of options">
+            <p-radioButton
+              [inputId]="name + '_' + opt.value"
+              [name]="name"
+              [value]="opt.value"
+              [formControl]="control"
+              class="gap-4"
+            ></p-radioButton>
+            <label [for]="name + '_' + opt.value" class="leading-none ml-2">{{ opt.label }}</label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </ng-container>
+    </div>
+
+    <!-- Checkbox -->
+    <div *ngSwitchCase="'checkbox'" class="p-formgroup-inline">
+      <ng-container *ngFor="let opt of options">
+        <p-checkbox
+          [inputId]="name + '_' + opt.value"
+          [formControl]="control"
+          [binary]="false"
+          [name]="name"
+          [value]="opt.value"
+          fluid
+        ></p-checkbox>
+        <label [for]="name + '_' + opt.value" class="leading-none ml-2">{{ opt.label }}</label>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <small class="p-error" *ngIf="showError">{{ firstErrorMessage }}</small>
+</div>

@@ -1,0 +1,91 @@
+
+<p-table
+    #dt
+    [value]="modes()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="[mod_id, mod_nom, mod_etat, ]"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mode {first} à {last} sur {totalRecords}"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+    class="striped-table"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Manage Modes</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem"></th>
+            <ng-container *ngFor="let col of columns">
+                <th
+                  [pSortableColumn]="col.sortable ? col.field : ''"
+                  [style]="col.style || ''"
+                >
+                  {{ col.header }}
+                  <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                </th>
+            </ng-container>
+       
+            <th style="min-width: 12rem" class="text-center">
+                <p-button icon="pi pi-plus" severity="secondary" rounded class="mr-2 " (onClick)="openNew()" />
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-mode let-rowIndex="rowIndex">
+        <tr>
+            <td style="width: 3rem; font-size: 0.9rem" class="text-primary">{{ rowIndex + 1}}</td>
+            <td style="min-width: 16rem">{{ mode.mod_id }}</td>
+      <td style="min-width: 16rem">{{ mode.mod_nom }}</td>
+      <td style="min-width: 16rem">{{ mode.mod_etat }}</td>
+      
+            <td class="text-center">
+                <p-button icon="pi pi-pencil" class="mr-2" rounded severity="primary" (click)="editMode(mode)" />
+                <p-button icon="pi pi-trash" severity="danger" rounded (click)="deleteMode(mode)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="modeDialog" [style]="{ width: '450px' }" header="Mode Details" [modal]="true">
+    <ng-template #content>
+        <form [formGroup]="modeForm">
+        <div class="flex flex-col gap-6">
+            <app-form-field [formGroup]="modeForm" name="mod_id" label="mod_id" type="text"></app-form-field>
+      <app-form-field [formGroup]="modeForm" name="mod_nom" label="mod_nom" type="text"></app-form-field>
+      <app-form-field [formGroup]="modeForm" name="mod_etat" label="mod_etat" type="text"></app-form-field>
+      
+           <!-- 
+            <app-form-field [formGroup]="modeForm" name="inventoryStatus" label="Inventaire"
+                type="select"
+                [options]="statuses"
+                optionLabel="label"
+                optionValue="label"
+            ></app-form-field>
+            <app-form-field [formGroup]="modeForm" name="category" label="Category" type="radio" 
+            [options]="[
+                { label: 'Homme', value: 'homme' },
+                { label: 'Femme', value: 'femme' }
+            ]"></app-form-field>
+            -->
+        </div>
+    </form>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Annuler" icon="pi pi-times" (click)="hideDialog()" severity="danger" />
+        <p-button label="Valider" icon="pi pi-check" (click)="saveMode()" severity="primary" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmdialog [style]="{ width: '450px' }" />
+<p-toast position="top-center" styleClass="toast-center" />

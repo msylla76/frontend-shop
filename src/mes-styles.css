@@ -1,0 +1,41 @@
+
+::ng-deep .p-datatable-tbody > tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+::ng-deep .p-datatable-tbody > tr:nth-child(odd) {
+background-color: #fff;
+}
+
+
+::ng-deep .striped-table tbody tr:nth-child(even) {
+background-color: #f9f9f9; /* ligne paire */
+}
+
+::ng-deep .striped-table tbody tr:nth-child(odd) {
+background-color: #ffffff; /* ligne impaire */
+}
+.text-center {
+    text-align: center !important;
+}
+.text-end {
+    text-align: right !important;
+}
+
+.toast-center {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+}
+
+
+.toast-center .p-toast-message {
+    text-align: center;
+}
+
+.material-icons {
+    font-size: 20px;
+    vertical-align: middle;
+}
+    
